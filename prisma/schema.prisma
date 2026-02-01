@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+        
+
+enum Role {
+  KARYAWAN
+  OWNER
+}
+
+enum TipeTrx {
+  JUAL
+  BELI
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  role      Role     @default(KARYAWAN)
+  createdAt DateTime @default(now())
+}
+
+model Kategori {
+  id        String   @id @default(cuid())
+  nama      String   @unique
+  createdAt DateTime @default(now())
+  barang    Barang[]
+}
+
+model Barang {
+  id         String      @id @default(cuid())
+  kode       String      @unique
+  nama       String
+  stok       Int         @default(0)
+  satuan     String      @default("Pcs")
+  leadTime   Int         @default(7)  // Lead time dalam hari, default 7 hari
+  createdAt  DateTime    @default(now())
+  transaksi  Transaksi[]
+  kategoriId String?
+  kategori   Kategori?   @relation(fields: [kategoriId], references: [id])
+}
+
+model Transaksi {
+  id       String   @id @default(cuid())
+  barangId String
+  barang   Barang   @relation(fields: [barangId], references: [id], onDelete: Cascade)
+  tipe     TipeTrx
+  jumlah   Int
+  tanggal  DateTime @default(now())
+}
