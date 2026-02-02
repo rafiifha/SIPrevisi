@@ -76,6 +76,19 @@ export async function DELETE(
 
     try {
         const { id } = await params
+
+        // Check if barang has transactions
+        const transactionCount = await prisma.transaksi.count({
+            where: { barangId: id }
+        })
+
+        if (transactionCount > 0) {
+            return NextResponse.json(
+                { error: 'Barang tidak dapat dihapus karena sudah memiliki data transaksi. Silakan hapus transaksi terkait terlebih dahulu.' },
+                { status: 400 }
+            )
+        }
+
         await prisma.barang.delete({ where: { id } })
         return NextResponse.json({ success: true })
     } catch (error) {

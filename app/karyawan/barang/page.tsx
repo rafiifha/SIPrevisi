@@ -219,10 +219,11 @@ export default function BarangPage() {
                 try {
                     const res = await fetch(`/api/barang/${id}`, { method: 'DELETE' })
                     if (!res.ok) {
+                        const data = await res.json()
                         setConfirmModal({
                             isOpen: true,
                             title: 'Gagal',
-                            description: 'Gagal menghapus barang',
+                            description: data.error || 'Gagal menghapus barang',
                             variant: 'error',
                             isAlert: true,
                             onConfirm: () => setConfirmModal(prev => ({ ...prev, isOpen: false }))
