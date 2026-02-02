@@ -87,6 +87,8 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
 
     const navItems = [
         { href: '/owner', label: 'Perencanaan Stok' },
+        { href: '/owner/barang', label: 'Data Barang' },
+        { href: '/owner/transaksi', label: 'Data Transaksi' },
     ]
 
     return (
@@ -96,6 +98,20 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center space-x-8">
                             <span className="text-xl font-bold text-white">Toko Berkah</span>
+                            <div className="hidden md:flex items-center space-x-4">
+                                {navItems.map((item) => (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className={`px-3 py-2 rounded-md text-sm font-medium transition ${pathname === item.href
+                                            ? 'bg-purple-600 text-white'
+                                            : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                                            }`}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <span className="text-slate-300 text-sm">
